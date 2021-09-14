@@ -24,9 +24,16 @@ func (ht *hashTable) set(p person) {
 	ht.table[key] = p
 }
 
-func (ht *hashTable) get(p person) person {
+func (ht *hashTable) get(p person) (person, error) {
 	key := hashFunc(p.name)
-	return ht.table[key]
+	per := ht.table[key]
+
+	if per.name == "" {
+		return per, fmt.Errorf("Couldn't find the person. \n")
+	} else {
+		return per, nil
+	}
+
 }
 
 func main() {
@@ -47,6 +54,18 @@ func main() {
 	table.set(p6)
 	table.set(p7)
 
+	p8 := person{name: "some person 8", age: 32}
 	fmt.Println(table.get(p3))
+
+	fmt.Println("getting p8")
+
+	p, err := table.get(p8)
+
+	if err != nil {
+		fmt.Println("Person Not Found")
+	} else {
+		fmt.Println(p)
+	}
+
 	fmt.Println(table.table)
 }
