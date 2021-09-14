@@ -23,8 +23,6 @@ def merge_sort(arr):
                 j += 1                
             k += 1
         
-        # print("arr is", arr)
-        # print("i is {}, j is {} , k is {}".format(i, j , k))
 
         while i < len(L):
             arr[k] = L[i]
