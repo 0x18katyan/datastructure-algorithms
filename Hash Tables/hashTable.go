@@ -36,6 +36,16 @@ func (ht *hashTable) get(p person) (person, error) {
 
 }
 
+func (ht *hashTable) keys() []string {
+	var keys []string
+	for _, val := range ht.table {
+		if val.name != "" {
+			keys = append(keys, val.name)
+		}
+	}
+	return keys
+}
+
 func main() {
 	var table hashTable
 	var p1 = person{name: "some person 1", age: 25}
@@ -68,4 +78,5 @@ func main() {
 	}
 
 	fmt.Println(table.table)
+	fmt.Println(table.keys())
 }
