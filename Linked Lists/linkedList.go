@@ -13,29 +13,44 @@ type linkedList struct {
 	elem int
 }
 
+func newLink(value int) link {
+	return link{value: value, next: nil}
+}
+
 // append to the last of the ll
 func (ll *linkedList) append(value int) {
 	fmt.Println("ll at the top", *ll)
+
 	if ll.head.value == 0 {
-		ll.head.value = value
+
+		ll.head = newLink(value)
+
 	} else if ll.tail.value == 0 {
-		ll.tail.value = value
+
+		ll.tail = newLink(value)
+
 	} else {
-		next := &ll.head.next
+
+		node := &ll.head
+
 		for {
-			if *next == nil {
-				li := link{value: value}
-				fmt.Println("Printing *next", *next)
-				*next = &li
-				fmt.Println("Priting at 27", *ll)
-				fmt.Println("print next", *next)
+
+			if node.next == nil {
+
+				li := newLink(value)
+				node.next = &li
 				break
+
 			} else {
-				// next = next.next
+				node = node.next
 			}
+
 		}
+
 	}
+
 	ll.elem += 1
+
 }
 
 // Will have to go to that position and shift all others to the next?
@@ -48,5 +63,4 @@ func main() {
 	ll.append(100)
 	ll.append(99)
 	ll.append(198)
-	fmt.Println(ll)
 }
