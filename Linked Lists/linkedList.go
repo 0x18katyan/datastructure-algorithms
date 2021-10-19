@@ -61,13 +61,13 @@ func (ll *linkedList) getNode(position int) (*link, error) {
 
 		return nil, fmt.Errorf("Element not found at position %v", position)
 
-	} else if position == 2 && ll.elem == 2 {
+	} else if position == 1 && ll.elem == 2 {
 
 		return &ll.tail, nil
 
 	} else {
 		for i := 0; i <= position; i++ {
-			if i != position {
+			if i+1 != position {
 				node = node.next
 			} else {
 				break
@@ -88,19 +88,31 @@ func (ll *linkedList) update(position int, value int) error {
 		tail := ll.tail
 		ll.tail = newL
 		ll.update(ll.elem-1, tail.value)
-		return
+		return nil
 
 		// If no elements and update is called then append
 	} else if ll.elem == 0 {
 		ll.append(value)
-		return
+		ll.elem += 1
+		return nil
 	} else {
 
-		node, err := ll.getNode(position)
+		oldNode, err := ll.getNode(position)
 
 		if err != nil {
-			// handle new node
+			return fmt.Errorf("Couldn't Update: %v", err)
 		}
+
+		parentNode, err := ll.getNode(position - 1)
+
+		if err != nil {
+			panic("Something's wrong: Couldn't fetch parent node")
+		}
+
+		newL.next = oldNode
+		parentNode.next = &newL
+		ll.elem += 1
+		return nil
 	}
 }
 
@@ -109,8 +121,9 @@ func main() {
 	ll.append(100)
 	ll.append(99)
 	ll.append(198)
+	ll.append(199)
 	fmt.Println(ll)
-	node, err := ll.getNode(10)
+	node, err := ll.getNode(3)
 
 	if err != nil {
 		panic(err)
