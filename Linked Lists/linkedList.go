@@ -129,7 +129,7 @@ func (ll *linkedList) remove(position int) error {
 
 // Prepend to the position
 func (ll *linkedList) prepend(position int, value int) error {
-
+	//Get previous node then add new node to previous nodes' next then append node to new node
 	prevNode, err := ll.getNode(position - 1)
 	prevNext := *prevNode.next
 	if err != nil {
@@ -142,10 +142,13 @@ func (ll *linkedList) prepend(position int, value int) error {
 	return nil
 }
 
+// Pop value
 func (ll *linkedList) pop() {
+	//Remove last value
 	ll.remove(ll.elem)
 }
 
+//Print linked list
 func (ll *linkedList) printLinkedList() {
 	for node := 1; node <= ll.elem; node++ {
 		link, err := ll.getNode(node)
