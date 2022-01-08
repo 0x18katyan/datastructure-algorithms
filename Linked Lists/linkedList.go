@@ -15,27 +15,46 @@ type linkedList struct {
 
 // append to the last of the ll
 func (ll *linkedList) append(value int) {
-	if ll.head.value == 0 {
+
+	if ll.head.value == 0 { //Write to head if head is empty
+
 		ll.head.value = value
-	} else if ll.tail.value == 0 {
+
+	} else if ll.tail.value == 0 { //Write to tail if tail is empty
+
 		ll.tail.value = value
-	} else {
+
+	} else { //For everything else just add the value to tail and shift tail to the last of head chain
+
 		next := &ll.head.next
+
 		for i := 1; i <= ll.elem; i++ {
+
 			if *next == nil {
+
 				*next = &link{value: ll.tail.value}
+
 				ll.tail = link{value: value}
+
 				break
+
 			} else {
+
 				nextLink := *next
+
 				next = &nextLink.next
+
 			}
+
 		}
+
 	}
+
 	ll.elem += 1
+
 }
 
-// Will have to go to that position and shift all others to the next?
+// Fetches link at position and updates value for that link
 func (ll *linkedList) update(position int, value int) error {
 
 	node, err := ll.getNode(position)
