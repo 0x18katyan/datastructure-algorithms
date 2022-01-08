@@ -23,10 +23,8 @@ func (ll *linkedList) append(value int) {
 		next := &ll.head.next
 		for i := 1; i <= ll.elem; i++ {
 			if *next == nil {
-				li := link{value: value, next: nil}
-				// tail := ll.tail.value
-				// *next = &ll.tail
-				*next = &li
+				*next = &link{value: ll.tail.value}
+				ll.tail = link{value: value}
 				break
 			} else {
 				nextLink := *next
@@ -45,41 +43,59 @@ func (ll *linkedList) update(position int) {
 // Iterates over the linkedList to get the value at link; starts at 1
 func (ll *linkedList) get(position int) (link, error) {
 	var link link
-	if position == 1 {
+
+	if position == 0 {
+
+		return link, fmt.Errorf("Link starts at 1")
+
+	} else if position == 1 {
+
 		return ll.head, nil
-	} else if position == ll.elem {
+
+	} else if position == ll.elem || position == -1 {
 		return ll.tail, nil
+
 	} else if position > ll.elem {
+
 		return link, fmt.Errorf("Linked List out of range")
+
 	} else {
+
 		link = *ll.head.next
-		for i := 2; i < ll.elem; i++ {
+		for i := 2; i <= position; i++ {
 			if i == position {
 				break
 			} else {
 				link = *link.next
 			}
+
 		}
+
 	}
+
 	return link, nil
+
 }
 
 func main() {
 	ll := linkedList{}
-	ll.append(100)
-	ll.append(99)
-	ll.append(198)
-	ll.append(199)
-	ll.append(200)
-	ll.append(201)
+	ll.append(1)
+	ll.append(2)
+	ll.append(3)
+	ll.append(4)
+	ll.append(5)
+	ll.append(6)
+	ll.append(7)
+	ll.append(8)
 
-	fmt.Println("printing ll at 83", ll)
+	fmt.Println("Linked List is", ll)
 
-	link, err := ll.get(5)
+	node := 6
+	link, err := ll.get(node)
 
 	if err != nil {
-		panic(err)
+		fmt.Println("Error while fetching link: ", err)
 	} else {
-		fmt.Println(link.value)
+		fmt.Printf("link at node %v is %v. \n", node, link)
 	}
 }
