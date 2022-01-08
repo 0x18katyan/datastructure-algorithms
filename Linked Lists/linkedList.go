@@ -105,7 +105,7 @@ func (ll *linkedList) update(position int, value int) error {
 // Remove Node
 func (ll *linkedList) remove(position int) error {
 
-	if position > 1 {
+	if position > 1 && position < ll.elem {
 		prevNode, err := ll.getNode(position - 1)
 		if err != nil {
 			return err
@@ -115,6 +115,12 @@ func (ll *linkedList) remove(position int) error {
 
 	} else if position == 1 {
 		ll.head = *ll.head.next
+	} else if position == -1 || position == ll.elem {
+		prevNode, err := ll.getNode(ll.elem - 1)
+		if err != nil {
+			return err
+		}
+		ll.tail = link{value: prevNode.value}
 	}
 
 	ll.elem -= 1
@@ -136,6 +142,10 @@ func (ll *linkedList) prepend(position int, value int) error {
 	return nil
 }
 
+func (ll *linkedList) pop() {
+	ll.remove(ll.elem)
+}
+
 func (ll *linkedList) printLinkedList() {
 	for node := 1; node <= ll.elem; node++ {
 		link, err := ll.getNode(node)
@@ -147,6 +157,7 @@ func (ll *linkedList) printLinkedList() {
 		}
 	}
 }
+
 func main() {
 	ll := linkedList{}
 	ll.append(1)
@@ -161,18 +172,27 @@ func main() {
 	fmt.Println("ORIGINAL LINKED LIST")
 	ll.printLinkedList()
 
-	ll.update(4, 12)
-	fmt.Println("AFTER UPDATING")
+	update_position, update_value := 4, 12
+	ll.update(update_position, update_value)
+	fmt.Printf("AFTER UPDATING %v index with %v value. \n", update_position, update_value)
 	ll.printLinkedList()
 
-	ll.remove(1)
-	fmt.Println("AFTER REMOVING")
+	remove := 8
+	ll.remove(remove)
+	fmt.Printf("AFTER REMOVING %v position.\n", remove)
 	ll.printLinkedList()
 
-	ll.prepend(4, 69)
-	fmt.Println("AFTER PREPENDING")
+	prepend_position := 4
+	prepend_value := 69
+	ll.prepend(prepend_position, prepend_value)
+	fmt.Printf("AFTER PREPENDING %v to position %v. \n", prepend_value, prepend_position)
+	ll.printLinkedList()
+
+	ll.pop()
+	fmt.Println("AFTER POP()")
 	ll.printLinkedList()
 
 	fmt.Println("head is", ll.head)
 	fmt.Println("tail is", ll.tail)
+
 }
