@@ -15,23 +15,22 @@ type linkedList struct {
 
 // append to the last of the ll
 func (ll *linkedList) append(value int) {
-	fmt.Println("ll at the top", *ll)
 	if ll.head.value == 0 {
 		ll.head.value = value
 	} else if ll.tail.value == 0 {
 		ll.tail.value = value
 	} else {
 		next := &ll.head.next
-		for {
+		for i := 1; i <= ll.elem; i++ {
 			if *next == nil {
-				li := link{value: value}
-				fmt.Println("Printing *next", *next)
+				li := link{value: value, next: nil}
+				// tail := ll.tail.value
+				// *next = &ll.tail
 				*next = &li
-				fmt.Println("Priting at 27", *ll)
-				fmt.Println("print next", *next)
 				break
 			} else {
-				// next = next.next
+				nextLink := *next
+				next = &nextLink.next
 			}
 		}
 	}
@@ -43,10 +42,44 @@ func (ll *linkedList) update(position int) {
 
 }
 
+// Iterates over the linkedList to get the value at link; starts at 1
+func (ll *linkedList) get(position int) (link, error) {
+	var link link
+	if position == 1 {
+		return ll.head, nil
+	} else if position == ll.elem {
+		return ll.tail, nil
+	} else if position > ll.elem {
+		return link, fmt.Errorf("Linked List out of range")
+	} else {
+		link = *ll.head.next
+		for i := 2; i < ll.elem; i++ {
+			if i == position {
+				break
+			} else {
+				link = *link.next
+			}
+		}
+	}
+	return link, nil
+}
+
 func main() {
 	ll := linkedList{}
 	ll.append(100)
 	ll.append(99)
 	ll.append(198)
-	fmt.Println(ll)
+	ll.append(199)
+	ll.append(200)
+	ll.append(201)
+
+	fmt.Println("printing ll at 83", ll)
+
+	link, err := ll.get(5)
+
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println(link.value)
+	}
 }
