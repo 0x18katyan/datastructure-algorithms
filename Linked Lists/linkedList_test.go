@@ -60,16 +60,36 @@ func TestRemove(t *testing.T) {
 	}
 }
 
-func TestPrepend(t *testing.T) {
-	prepend_position := 4
-	prepend_value := 61
+func TestInsert(t *testing.T) {
+	insert_position := 4
+	insert_value := 61
 
-	ll.prepend(prepend_position, prepend_value)
-	node, _ := ll.getNode(prepend_position)
+	ll.insert(insert_position, insert_value)
+	node, _ := ll.getNode(insert_position)
 
 	got := node.value
-	if got != prepend_value {
-		t.Errorf("Error in prepend function. Wanted %v, got %v", prepend_value, got)
+	if got != insert_value {
+		t.Errorf("Error in insert function. Wanted %v, got %v", insert_value, got)
+		ll.printLinkedList()
+	}
+}
+
+func TestPrepend(t *testing.T) {
+	prepend_value := 0
+
+	prev_head := ll.head.value
+
+	ll.prepend(prepend_value)
+
+	got := ll.head.value
+	got_next := ll.head.next.value
+
+	if got != 0 {
+		t.Errorf("Error in prepend function. Wanted head value as %v, got %v", prepend_value, got)
+		ll.printLinkedList()
+	} else if got_next != prev_head {
+		t.Errorf("Error in prepend function. Wanted head.next.value as %v, got %v", prev_head, got_next)
+		ll.printLinkedList()
 	}
 }
 
@@ -85,7 +105,7 @@ func TestPop(t *testing.T) {
 }
 
 func TestHead(t *testing.T) {
-	if ll.head.value != 1 {
+	if ll.head.value != 0 {
 		t.Errorf("Error while assigning values to ll.head. Wanted 1, got %v", ll.head)
 	}
 }
@@ -94,5 +114,12 @@ func TestTail(t *testing.T) {
 	tailValue := ll.tail.value
 	if tailValue != 7 {
 		t.Errorf("Error while assigning values to ll.tail. Wanted 7, got %v", tailValue)
+	}
+}
+
+func TestLength(t *testing.T) {
+	if ll.elem != 8 {
+		t.Errorf("Error while getting the length of linkedList. Wanted 8, got %v", ll.elem)
+		ll.printLinkedList()
 	}
 }

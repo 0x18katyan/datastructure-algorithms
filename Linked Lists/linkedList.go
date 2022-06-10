@@ -128,8 +128,8 @@ func (ll *linkedList) remove(position int) error {
 	return nil
 }
 
-// Prepend to the position
-func (ll *linkedList) prepend(position int, value int) error {
+// Insert to the position, pushes the current value to next
+func (ll *linkedList) insert(position int, value int) error {
 	//Get previous node then add new node to previous nodes' next then append node to new node
 	prevNode, err := ll.getNode(position - 1)
 	prevNext := *prevNode.next
@@ -141,6 +141,14 @@ func (ll *linkedList) prepend(position int, value int) error {
 
 	ll.elem += 1
 	return nil
+}
+
+// Prepend to the top of the list
+func (ll *linkedList) prepend(value int) {
+	prev_head := ll.head
+	node := link{value: value, next: &prev_head}
+	ll.head = node
+	ll.elem += 1
 }
 
 // Pop value
