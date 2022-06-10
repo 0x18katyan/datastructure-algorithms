@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type link struct {
 	value int
@@ -17,31 +19,30 @@ type linkedList struct {
 func (ll *linkedList) getNode(position int) (*link, error) {
 	var link *link
 
-	if position == 0 {
+	if position == 0 { //link indexing starts at 1
 
-		return link, fmt.Errorf("Link starts at 1")
+		return link, fmt.Errorf("link starts at 1")
 
-	} else if position == 1 {
+	} else if position == 1 { // return head if 1
 
 		return &ll.head, nil
 
-	} else if position == ll.elem || position == -1 {
+	} else if position == ll.elem || position == -1 { // if position eq length of linkedList or position is -1
 		return &ll.tail, nil
 
 	} else if position > ll.elem {
 
-		return link, fmt.Errorf("Linked List out of range")
+		return link, fmt.Errorf("linked list out of range")
 
 	} else {
 
 		link = ll.head.next
-		for i := 2; i <= position; i++ {
+		for i := 2; i <= position; i++ { // iterate over the linkedList
 			if i == position {
 				break
 			} else {
-				link = link.next
+				link = link.next // set next link as link for the upcoming iteration
 			}
-
 		}
 	}
 	return link, nil
@@ -64,7 +65,7 @@ func (ll *linkedList) append(value int) {
 
 		for i := 1; i <= ll.elem; i++ {
 
-			if *next == nil {
+			if *next == nil { // if the dereferenced value of next is nil that means we have reached the end of the link
 
 				*next = &link{value: ll.tail.value}
 
@@ -72,7 +73,7 @@ func (ll *linkedList) append(value int) {
 
 				break
 
-			} else {
+			} else { // keep on iterating over the linkedList
 
 				nextLink := *next
 
@@ -94,7 +95,7 @@ func (ll *linkedList) update(position int, value int) error {
 	node, err := ll.getNode(position)
 
 	if err != nil {
-		return fmt.Errorf("Error getting value at %v : %v .\n", ll.elem, err)
+		return fmt.Errorf("error getting value at %v : %v", ll.elem, err)
 	}
 
 	*node = link{value: value, next: node.next}
@@ -105,7 +106,7 @@ func (ll *linkedList) update(position int, value int) error {
 // Remove Node
 func (ll *linkedList) remove(position int) error {
 
-	if position > 1 && position < ll.elem {
+	if position > 1 && position < ll.elem { // normal case
 		prevNode, err := ll.getNode(position - 1)
 		if err != nil {
 			return err
@@ -113,9 +114,9 @@ func (ll *linkedList) remove(position int) error {
 		currentNode := prevNode.next
 		prevNode.next = currentNode.next
 
-	} else if position == 1 {
+	} else if position == 1 { // if removing the head
 		ll.head = *ll.head.next
-	} else if position == -1 || position == ll.elem {
+	} else if position == -1 || position == ll.elem { // if removing the last element
 		prevNode, err := ll.getNode(ll.elem - 1)
 		if err != nil {
 			return err
@@ -133,7 +134,7 @@ func (ll *linkedList) prepend(position int, value int) error {
 	prevNode, err := ll.getNode(position - 1)
 	prevNext := *prevNode.next
 	if err != nil {
-		return fmt.Errorf("Error getting previous node: %v", err)
+		return fmt.Errorf("error getting previous node: %v", err)
 	}
 
 	*prevNode.next = link{value: value, next: &prevNext}
@@ -159,43 +160,4 @@ func (ll *linkedList) printLinkedList() {
 			fmt.Printf("link at node %v is %v. \n", node, link)
 		}
 	}
-}
-
-func main() {
-	ll := linkedList{}
-	ll.append(1)
-	ll.append(2)
-	ll.append(3)
-	ll.append(4)
-	ll.append(5)
-	ll.append(6)
-	ll.append(7)
-	ll.append(8)
-
-	fmt.Println("ORIGINAL LINKED LIST")
-	ll.printLinkedList()
-
-	update_position, update_value := 4, 12
-	ll.update(update_position, update_value)
-	fmt.Printf("AFTER UPDATING %v index with %v value. \n", update_position, update_value)
-	ll.printLinkedList()
-
-	remove := 8
-	ll.remove(remove)
-	fmt.Printf("AFTER REMOVING %v position.\n", remove)
-	ll.printLinkedList()
-
-	prepend_position := 4
-	prepend_value := 69
-	ll.prepend(prepend_position, prepend_value)
-	fmt.Printf("AFTER PREPENDING %v to position %v. \n", prepend_value, prepend_position)
-	ll.printLinkedList()
-
-	ll.pop()
-	fmt.Println("AFTER POP()")
-	ll.printLinkedList()
-
-	fmt.Println("head is", ll.head)
-	fmt.Println("tail is", ll.tail)
-
 }
